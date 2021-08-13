@@ -18,7 +18,7 @@ import java.util.Optional;
 @Slf4j
 @RequestMapping("/customer")
 public class CustomerController {
-//Hola Commit ..
+
     @Autowired
     CustomerService customerService;
 
@@ -33,15 +33,24 @@ public class CustomerController {
     }
 
     @PostMapping("/create")
-    public Mono<ResponseEntity<Customer>> create(@RequestBody Customer c){
-        return customerService.create(c)
-                .map(savedCustomer -> new ResponseEntity<>(savedCustomer , HttpStatus.CREATED));
+    public Mono<ResponseEntity<Customer>> create(@RequestBody Customer customer){
+        return customerService.findTypeCustomer(customer.getTypeCustomer().getId())
+                .flatMap(typeCustomer -> {
+                            customer.setTypeCustomer(typeCustomer);
+                            return customerService.create(customer)
+                                    .map(savedCustomer -> new ResponseEntity<>(savedCustomer , HttpStatus.CREATED));
+                        }
+                )
+                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @PutMapping("/update")
-    public Mono<ResponseEntity<Customer>> update(@RequestBody Customer c) {
-        return customerService.update(c)
-                .map(savedCustomer -> new ResponseEntity<>(savedCustomer, HttpStatus.CREATED))
+    public Mono<ResponseEntity<Customer>> update(@RequestBody Customer customer) {
+        return customerService.findTypeCustomer(customer.getTypeCustomer().getId())
+                .flatMap(typeCustomer -> {
+                    return customerService.update(customer)
+                            .map(savedCustomer -> new ResponseEntity<>(savedCustomer, HttpStatus.CREATED));
+                })
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

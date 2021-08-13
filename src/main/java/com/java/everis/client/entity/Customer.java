@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
-@Document("CUSTOMER")
+@Document("Customer")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer {
@@ -38,9 +38,4 @@ public class Customer {
     @NotNull
     String gender;
 
-
-    public enum TypeCustomer {
-        PERSONAL,
-        EMPRESARIAL
-    }
 }
