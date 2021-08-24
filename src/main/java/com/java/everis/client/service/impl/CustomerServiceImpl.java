@@ -14,7 +14,8 @@ import reactor.core.publisher.Mono;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    WebClient webClient = WebClient.create("http://localhost:8887/ms-profile/profile/typecustomer");
+    WebClient webClient = WebClient.create("http://localhost:8887/ms-profile/typecustomer");
+//    WebClient webClient = WebClient.create("http://gateway:8887/api/ms-profile/typecustomer");
 
     @Autowired
     CustomerRepository customerRepository;
